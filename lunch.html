@@ -1,39 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>PulaTechCon 2025 - Lunch Menu</title>
+  <meta charset="UTF-8">
+  <title>Lunch Menu – PulaTechCon 2025</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f5f5f5; color: #333; }
+    header { background: #2e2a8f; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+    nav a { color: white; text-decoration: none; margin-left: 1.5rem; font-weight: bold; }
+    main { max-width: 900px; margin: 2rem auto; padding: 1rem; background: white; border-radius: 8px; }
+    footer { background: #222; color: white; text-align: center; padding: 1rem; margin-top: 3rem; }
+    form input, form select, form button {
+      width: 100%; padding: 0.5rem; margin-top: 10px; border-radius: 4px;
+    }
+    form button {
+      background: #2e2a8f; color: white; border: none; font-weight: bold; cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <h2>Lunch Menu Selection</h2>
-  <form id="lunchForm">
-    <label>Name: <input type="text" id="name" required></label><br>
-    <label>
-      Menu:
+  <header>
+    <h1>Lunch Selection</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="schedule.html">Schedule</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Choose your lunch menu</h2>
+    <form id="lunchForm">
+      <label>Menu choice:</label>
       <select id="menu">
         <option value="Meat">Meat</option>
         <option value="Fish">Fish</option>
         <option value="Vegetarian">Vegetarian</option>
       </select>
-    </label><br>
-    <button type="submit">Save</button>
-  </form>
-  <p><a href="index.html">Back to Registration</a></p>
+      <button type="submit">Submit</button>
+    </form>
+  </main>
+
+  <footer>
+    Faculty of Engineering – Juraj Dobrila University of Pula
+  </footer>
 
   <script>
     const form = document.getElementById("lunchForm")
     form.addEventListener("submit", e => {
       e.preventDefault()
-      const entry = {
-        name: document.getElementById("name").value,
-        menu: document.getElementById("menu").value
-      }
-
-      let lunchOrders = JSON.parse(localStorage.getItem("lunchOrders") || "[]")
-      lunchOrders.push(entry)
-      localStorage.setItem("lunchOrders", JSON.stringify(lunchOrders))
-
-      alert("Lunch choice saved!")
-      form.reset()
+      const menu = document.getElementById("menu").value
+      const user = JSON.parse(localStorage.getItem("pulatechcon_user") || "{}")
+      if (!user.fname || !user.lname) return alert("Please log in first.")
+      const entry = { name: user.fname + ' ' + user.lname, menu }
+      let orders = JSON.parse(localStorage.getItem("lunchOrders") || "[]")
+      orders = orders.filter(o => o.name !== entry.name)
+      orders.push(entry)
+      localStorage.setItem("lunchOrders", JSON.stringify(orders))
+      alert("Lunch order saved!")
     })
   </script>
 </body>

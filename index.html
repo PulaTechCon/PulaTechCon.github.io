@@ -1,35 +1,118 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>PulaTechCon 2025 - Registration</title>
+  <meta charset="UTF-8">
+  <title>Central and Mediterranean European Conference on New Technologies, Innovations, Society and Development</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { background: #f5f5f5; color: #333; }
+    header { background: #2e2a8f; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+    nav a { color: white; text-decoration: none; margin-left: 1.5rem; font-weight: bold; }
+    main { max-width: 900px; margin: 2rem auto; padding: 1rem; background: white; border-radius: 8px; }
+    footer { background: #222; color: white; text-align: center; padding: 1rem; margin-top: 3rem; }
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 10; }
+    .modal { background: white; padding: 2rem; border-radius: 8px; width: 300px; }
+    .modal input, .modal button { width: 100%; padding: 0.5rem; margin-top: 10px; }
+    .modal button { background: #2e2a8f; color: white; border: none; font-weight: bold; cursor: pointer; }
+    #adminLink { display: none; }
+  </style>
 </head>
 <body>
-  <h2>PulaTechCon 2025 Registration</h2>
-  <form id="regForm">
-    <label>First Name: <input type="text" id="firstName" required></label><br>
-    <label>Last Name: <input type="text" id="lastName" required></label><br>
-    <label>Affiliation: <input type="text" id="affiliation" required></label><br>
-    <button type="submit">Submit</button>
-  </form>
-  <p><a href="schedule.html">View Schedule</a> | <a href="lunch.html">Select Lunch</a></p>
+  <header>
+    <h1>Central and Mediterranean European Conference</h1>
+    <nav>
+      <a href="schedule.html">Schedule</a>
+      <a href="lunch.html">Lunch</a>
+      <a href="admin.html" id="adminLink">Admin</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Welcome to the Central and Mediterranean European Conference</h2>
+    <p>Join us for an enriching experience in Pula, Croatia, from July 16th to 18th, 2025!</p>
+    <p>The Second Central and Mediterranean European Conference on New Technologies, Society, and Development builds upon the success of its inaugural edition in 2024. This conference continues to serve as a platform for collaboration and innovation across diverse scientific disciplines. Esteemed scholars and industry experts will gather to advance technological knowledge and explore its societal impacts.</p>
+    <p><strong>Abstract submission deadline:</strong> June 15th, 2025. Please use the submission portal to upload your abstracts. A conference paper template is also available.</p>
+    <p>The event will feature dynamic research presentations, thought-provoking debates, and networking opportunities. Organized through a partnership between academic institutions and global technical firms, the conference reaffirms a commitment to the advancement and dissemination of technological knowledge.</p>
+    <p>We are deeply grateful for your contribution to the success of PulaTechCon 2024 and hope you found the experience both enriching and inspiring. Looking forward to seeing you in the 2025 edition!</p>
+    <p>All submitted abstracts will undergo a thorough peer-review process and accepted abstracts will be published in the conference proceedings. Registration is open and participation is free of charge.</p>
+    <h3>Conference Topics</h3>
+    <ul>
+      <li>Emerging Technologies, Innovations, Health and Society</li>
+      <li>Society and Technological Integration</li>
+      <li>Sustainable Development through Technology</li>
+      <li>Industry 4.0 and the Future of Work</li>
+      <li>Digital Transformation in Various Sectors</li>
+      <li>Collaborative Innovation and Research Synergies</li>
+      <li>Artificial Intelligence and Machine Learning Applications</li>
+      <li>Technological Education and Knowledge Sharing</li>
+      <li>Impact of Technology on Development</li>
+    </ul>
+    <h3>Speakers</h3>
+    <p>To be announced (July 2025).</p>
+  </main>
+
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal">
+      <h2>Welcome</h2>
+      <input type="text" id="loginFirst" placeholder="First Name">
+      <input type="text" id="loginLast" placeholder="Last Name">
+      <button onclick="loginUser()">Continue</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="registrationModal" style="display: none;">
+    <div class="modal">
+      <h2>Complete Registration</h2>
+      <input type="text" id="firstName" placeholder="First Name">
+      <input type="text" id="lastName" placeholder="Last Name">
+      <input type="text" id="affiliation" placeholder="Affiliation">
+      <button onclick="registerUser()">Register</button>
+    </div>
+  </div>
+
+  <footer>
+    Faculty of Engineering – Juraj Dobrila University of Pula
+  </footer>
 
   <script>
-    const form = document.getElementById("regForm")
-    form.addEventListener("submit", e => {
-      e.preventDefault()
-      const participant = {
-        firstName: document.getElementById("firstName").value,
-        lastName: document.getElementById("lastName").value,
-        affiliation: document.getElementById("affiliation").value
+    function loginUser() {
+      const loginFirst = document.getElementById('loginFirst').value.trim().toLowerCase()
+      const loginLast = document.getElementById('loginLast').value.trim().toLowerCase()
+      if (!loginFirst || !loginLast) return alert('Enter both fields.')
+
+      if (loginFirst === 'admin' && loginLast === 'admin') {
+        document.getElementById('adminLink').style.display = 'inline'
+        document.getElementById('loginModal').style.display = 'none'
+      } else {
+        const user = JSON.parse(localStorage.getItem('pulatechcon_user') || '{}')
+        if (user.fname?.toLowerCase() === loginFirst && user.lname?.toLowerCase() === loginLast) {
+          document.getElementById('loginModal').style.display = 'none'
+        } else {
+          document.getElementById('loginModal').style.display = 'none'
+          document.getElementById('registrationModal').style.display = 'flex'
+          document.getElementById('firstName').value = loginFirst
+          document.getElementById('lastName').value = loginLast
+        }
       }
+    }
 
-      let participants = JSON.parse(localStorage.getItem("participants") || "[]")
-      participants.push(participant)
-      localStorage.setItem("participants", JSON.stringify(participants))
+    function registerUser() {
+      const fname = document.getElementById('firstName').value.trim()
+      const lname = document.getElementById('lastName').value.trim()
+      const aff = document.getElementById('affiliation').value.trim()
+      if (!fname || !lname || !aff) return alert('Fill in all fields.')
 
-      alert("Thank you! You are registered.")
-      form.reset()
-    })
+      const user = { fname, lname, aff }
+      localStorage.setItem('pulatechcon_user', JSON.stringify(user))
+      document.getElementById('registrationModal').style.display = 'none'
+    }
+
+    window.onload = () => {
+      const user = JSON.parse(localStorage.getItem('pulatechcon_user') || '{}')
+      if (user.fname && user.lname) {
+        document.getElementById('loginModal').style.display = 'none'
+      }
+    }
   </script>
 </body>
 </html>
