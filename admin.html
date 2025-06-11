@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PulaTechCon 2025 - Admin</title>
+</head>
+<body>
+  <h2>Registered Participants</h2>
+  <div id="list"></div>
+
+  <script>
+    const list = document.getElementById("list")
+    const participants = JSON.parse(localStorage.getItem("participants") || "[]")
+
+    participants.forEach((p, i) => {
+      const div = document.createElement("div")
+      div.innerHTML = `
+        <p><strong>${p.firstName} ${p.lastName}</strong> - ${p.affiliation}</p>
+        <button onclick="printBadge(${i})">Print Badge</button>
+        <hr>
+      `
+      list.appendChild(div)
+    })
+
+    function printBadge(i) {
+      const p = JSON.parse(localStorage.getItem("participants"))[i]
+      const w = window.open("", "", "width=300,height=200")
+      w.document.write(`<h1>${p.firstName} ${p.lastName}</h1><h3>${p.affiliation}</h3><script>window.print();<\/script>`)
+      w.document.close()
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PulaTechCon 2025 - Lunch Menu</title>
+</head>
+<body>
+  <h2>Lunch Menu Selection</h2>
+  <form id="lunchForm">
+    <label>Name: <input type="text" id="name" required></label><br>
+    <label>
+      Menu:
+      <select id="menu">
+        <option value="Meat">Meat</option>
+        <option value="Fish">Fish</option>
+        <option value="Vegetarian">Vegetarian</option>
+      </select>
+    </label><br>
+    <button type="submit">Save</button>
+  </form>
+  <p><a href="index.html">Back to Registration</a></p>
+
+  <script>
+    const form = document.getElementById("lunchForm")
+    form.addEventListener("submit", e => {
+      e.preventDefault()
+      const entry = {
+        name: document.getElementById("name").value,
+        menu: document.getElementById("menu").value
+      }
+
+      let lunchOrders = JSON.parse(localStorage.getItem("lunchOrders") || "[]")
+      lunchOrders.push(entry)
+      localStorage.setItem("lunchOrders", JSON.stringify(lunchOrders))
+
+      alert("Lunch choice saved!")
+      form.reset()
+    })
+  </script>
+</body>
+</html>
